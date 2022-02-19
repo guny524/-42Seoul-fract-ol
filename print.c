@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 17:37:57 by min-jo            #+#    #+#             */
-/*   Updated: 2022/02/18 17:41:49 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/02/19 15:23:19 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,19 @@ void	print_defaults(void)
 	printf("  bound    : defaults 2\n");
 	printf("    try fractol Julia -0.8 0.156\n");
 	printf("    try fractol Julia -0.75\n");
+	printf("    try fractol Burningship -1.25, 0.465\n");
 	exit(1);
 }
 
-void	print_manual(void)
+void	print_manual(const char	*names[], size_t size)
 {
+	size_t	i;
+
 	printf("usage : fractol [fractols] [real X] [imagenary Y] [bound^2]\n");
 	printf("  fractols :\n");
-	printf("    --> Mandelbrot :\n");
-	printf("    --> Julia :\n");
-	printf("    --> Powertower :\n");
+	i = 0;
+	while (i < size)
+		printf("    --> %s :\n", names[i++]);
 	print_defaults();
 }
 

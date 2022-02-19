@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/12 15:31:29 by min-jo            #+#    #+#             */
-/*   Updated: 2022/02/19 15:11:21 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/02/19 16:09:47 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,37 +90,30 @@ int	julia(t_mlx *mlx, double xn, double yn, int iter)
 * (Xn)^2 + (Yn)^2 <= (bound)^2
 * 복소평면에서 원점으로 부터 특정 거리 안에서 안 벗어나면 발산 안 함
 *
-* complex 라이브러리 구현 참고
-* https://github.com/bminor/musl/tree/master/src/complex
-* cpow(z, c) = cexp(c * clog(z));
-* cexp(a + bi) = {exp(a)*cos(b),exp(a)*sin(b)};
-* clog(z) = {log(cabs(z)), carg(z)};
-* carg(a + bi) = atan2(b, a);
-* cabs(a + bi) = hypot(a, b);
+* Z가 고정되어 있고, C가 변한다.
+*
+* Zn = Xn + iYn, C = a + ib
+* (Zn)^2 = (Xn)^2 - (Yn)^2 + i2|XnYn|
+* (Zn)^2 + C = (Xn)^2 - (Yn)^2 + a + i(2|XnYn| + b)
 */
-int	powertower(t_mlx *mlx, double xn, double yn, int iter)
+int	burningship(t_mlx *mlx, double a, double b, int iter)
 {
 	int		i;
+	double	xn;
+	double	yn;
 	double	x1n;
 	double	y1n;
 
-	x1n = xn;
-	y1n = yn;
+	x1n = mlx->init_num.xr;
+	y1n = mlx->init_num.yi;
 	i = -1;
 	while (++i < iter)
 	{
 		xn = x1n;
 		yn = y1n;
-		// complex log
-		x1n = log(hypot(xn, yn));
-		y1n = atan2(yn, xn);
-		// multiply
-		xn = x1n * x1n - y1n * y1n;
-		yn = 2 * x1n * y1n;
-		// exponent
-		x1n = exp(xn) * cos(yn);
-		y1n = exp(xn) * sin(yn);
-		if (hypot(x1n, y1n) > mlx->bound * mlx->bound)
+		x1n = xn * xn - yn * yn + a;
+		y1n = 2 * fabs(xn * yn) + b;
+		if (x1n * x1n + y1n * y1n > mlx->bound * mlx->bound)
 			return (0);
 	}
 	return (1);
@@ -155,7 +148,7 @@ void	paint_image(t_mlx *mlx, int func_index, int iter, t_trgb trgb)
 	int			y;
 	int			*tmp;
 	int			ret;
-	const t_fp	cal_trgb[] = {mandelbrot, julia, powertower};
+	const t_fp	cal_trgb[] = {mandelbrot, julia, burningship};
 
 	y = -1;
 	while (++y < H)
@@ -164,11 +157,11 @@ void	paint_image(t_mlx *mlx, int func_index, int iter, t_trgb trgb)
 		while (++x < W)
 		{
 			tmp = (int *)(mlx->img.addr + y * mlx->img.len + x
-				* mlx->img.bpp / 8);
+					* mlx->img.bpp / 8);
 			ret = cal_trgb[func_index](mlx,
-				(x - CW) / W * mlx->ratio - mlx->center.xr,
-				(y - CH) / W * mlx->ratio - mlx->center.yi,
-				iter);
+					(x - CW) / W * mlx->ratio - mlx->center.xr,
+					(y - CH) / W * mlx->ratio - mlx->center.yi,
+					iter);
 			if (ret)
 				*tmp = *(int *)(char [4]){trgb.b, trgb.g, trgb.r, trgb.t};
 		}

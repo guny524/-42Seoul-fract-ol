@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/12 17:38:41 by min-jo            #+#    #+#             */
-/*   Updated: 2022/02/18 17:38:52 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/02/19 15:29:05 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	isstrin(const char *str, const char *names[], int size)
 
 void	init_screen_parameter(t_mlx *mlx)
 {
+	mlx->init_num = (t_inum){0, 0};
+	mlx->bound = 2;
 	mlx->center = (t_inum){0.0, 0.0};
 	mlx->ratio = 4;
 	mlx->mod = MOD_NORMAL_ZOOM;
@@ -49,17 +51,16 @@ void	init_screen_parameter(t_mlx *mlx)
 
 int	main(int argc, char *argv[])
 {
-	const char	*names[] = {"Mandelbrot", "Julia", "Powertower"};
+	const char	*names[] = {"Mandelbrot", "Julia", "Burningship"};
 	const int	size = sizeof(names) / sizeof(char *);
 	t_mlx		mlx;
 
-	mlx.init_num = (t_inum){0, 0};
-	mlx.bound = 2;
 	if (!(2 <= argc && argc <= 5))
-		print_manual();
+		print_manual(names, sizeof(names) / sizeof(char *));
 	mlx.name = isstrin(argv[1], names, size);
 	if (-1 == mlx.name)
-		print_manual();
+		print_manual(names, sizeof(names) / sizeof(char *));
+	init_screen_parameter(&mlx);
 	if (3 <= argc)
 		mlx.init_num.xr = get_double(argv[2]);
 	if (4 <= argc)
@@ -69,7 +70,6 @@ int	main(int argc, char *argv[])
 	if (mlx.bound * mlx.bound < mlx.init_num.xr * mlx.init_num.xr
 		+ mlx.init_num.yi * mlx.init_num.yi)
 		print_bound(mlx.init_num.xr, mlx.init_num.yi, mlx.bound);
-	init_screen_parameter(&mlx);
 	run(&mlx);
 	return (0);
 }
