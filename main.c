@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/12 17:38:41 by min-jo            #+#    #+#             */
-/*   Updated: 2022/02/19 15:29:05 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/02/19 17:16:58 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	init_screen_parameter(t_mlx *mlx)
 	mlx->ratio = 4;
 	mlx->mod = MOD_NORMAL_ZOOM;
 	mlx->color = 0;
+	mlx->iter = 0;
 }
 
 int	main(int argc, char *argv[])
@@ -72,4 +73,16 @@ int	main(int argc, char *argv[])
 		print_bound(mlx.init_num.xr, mlx.init_num.yi, mlx.bound);
 	run(&mlx);
 	return (0);
+}
+
+void	if_event_clear(t_mlx *mlx, int button, int keycode)
+{
+	if (KEY_ESC == keycode || KEY_UP == keycode || KEY_DOWN == keycode
+		|| KEY_LEFT == keycode || KEY_RIGHT == keycode || KEY_M == keycode
+		|| KEY_C == keycode
+		|| MOUSE_UP == button || MOUSE_DOWN == button)
+	{
+		clear_image(&mlx->img);
+		mlx->iter = 0;
+	}
 }

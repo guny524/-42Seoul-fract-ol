@@ -3,6 +3,9 @@
 [fract-ol](https://warm-salsa-f69.notion.site/fract-ol-040257364a354b2faeb54977a73d4b1f)\
 [miniLibX mlx](https://warm-salsa-f69.notion.site/miniLibX-mlx-43703bbe0bbe47f3a2e82604c3b1910c)
 
+![exmaple gif](https://user-images.githubusercontent.com/43983919/154825166-509ee29d-35e2-46b0-873e-d23ce9e099ea.gif)
+![exmaple image](https://user-images.githubusercontent.com/43983919/154827031-f4d04039-6437-41e6-aa49-235c47b52899.png)
+
 ## 프로젝트 소개
 - mlx 라이브러리의 사용법을 익힌다.
 - fractal에 대해 공부한다.

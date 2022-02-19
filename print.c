@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 17:37:57 by min-jo            #+#    #+#             */
-/*   Updated: 2022/02/19 15:23:19 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/02/19 21:11:11 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	print_defaults(void)
 	printf("  bound    : defaults 2\n");
 	printf("    try fractol Julia -0.8 0.156\n");
 	printf("    try fractol Julia -0.75\n");
-	printf("    try fractol Burningship -1.25, 0.465\n");
 	exit(1);
 }
 

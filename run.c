@@ -6,12 +6,13 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 20:56:06 by min-jo            #+#    #+#             */
-/*   Updated: 2022/02/19 16:16:57 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/02/23 20:39:40 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "mlx.h"
 #include "ft_fractol.h"
 
@@ -25,22 +26,21 @@ int	destroy(t_mlx *mlx)
 int	key_hook(int keycode, t_mlx *mlx)
 {
 	int	x;
-	int	y;
 
+	if_event_clear(mlx, -1, keycode);
 	if (KEY_ESC == keycode)
 		destroy(mlx);
 	else if (KEY_UP == keycode)
-		mlx->center.yi += 0.05 * mlx->ratio;
-	else if (KEY_DOWN == keycode)
 		mlx->center.yi -= 0.05 * mlx->ratio;
+	else if (KEY_DOWN == keycode)
+		mlx->center.yi += 0.05 * mlx->ratio;
 	else if (KEY_LEFT == keycode)
-		mlx->center.xr += 0.05 * mlx->ratio;
-	else if (KEY_RIGHT == keycode)
 		mlx->center.xr -= 0.05 * mlx->ratio;
+	else if (KEY_RIGHT == keycode)
+		mlx->center.xr += 0.05 * mlx->ratio;
 	else if (KEY_M == keycode && MOD_NORMAL_ZOOM == mlx->mod)
 	{
-		mlx_mouse_get_pos(mlx->win, &x, &y);
-		mlx->mouseY = y;
+		mlx_mouse_get_pos(mlx->win, &x, &mlx->mouseY);
 		mlx->save_ratio = mlx->ratio;
 		mlx->mod = MOD_MOUSE_ZOOM;
 	}
@@ -51,17 +51,21 @@ int	key_hook(int keycode, t_mlx *mlx)
 	return (0);
 }
 
-/*
-* mlx->center.xr -= (x - CW) / W * 0.2 * mlx->ratio;
-* mlx->center.yi -= (y - CH) / W * 0.2 * mlx->ratio;
-*/
 int	mouse_hook(int button, int x, int y, t_mlx *mlx)
 {
-	x = y;
+	if_event_clear(mlx, button, -1);
 	if (MOUSE_UP == button)
+	{
+		mlx->center.xr -= (double)(x - CW) / W * 0.1 * mlx->ratio;
+		mlx->center.yi -= (double)(y - CH) / H * 0.1 * mlx->ratio;
 		mlx->ratio *= 0.8;
+	}
 	else if (MOUSE_DOWN == button)
+	{
+		mlx->center.xr -= (double)(x - CW) / W * 0.1 * mlx->ratio;
+		mlx->center.yi -= (double)(y - CH) / H * 0.1 * mlx->ratio;
 		mlx->ratio *= 1.2;
+	}
 	return (0);
 }
 
@@ -85,17 +89,14 @@ int	loop_hook(t_mlx *mlx)
 {
 	int			x;
 	int			y;
-	int			i;
+	const int	i = mlx->iter;
 	const int	c = mlx->color;
 
-	clear_image(&mlx->img);
-	i = -1;
-	while (++i < 20)
-	{
-		paint_image(mlx, mlx->name, i, (t_trgb){0,
-			!((c+i)%3)*255, !((c+i)%3-1)*255, !(((c+i)%3+1)%3)*255});
-		mlx_put_image_to_window(mlx->ptr, mlx->win, mlx->img.ptr, 0, 0);
-	}
+	if (i >= INT_MAX - 1)
+		return (0);
+	paint_image(mlx, mlx->name, i, (t_trgb){0, !((c + i) % 3) * 255,
+		!((c + i) % 3 - 1) * 255, !(((c + i) % 3 + 1) % 3) * 255});
+	mlx_put_image_to_window(mlx->ptr, mlx->win, mlx->img.ptr, 0, 0);
 	mlx_string_put(mlx->ptr, mlx->win, 30, 20, 0, "Move        : arrow");
 	mlx_string_put(mlx->ptr, mlx->win, 30, 40, 0, "Zoom        : mouse wheel");
 	mlx_string_put(mlx->ptr, mlx->win, 30, 60, 0, "Mouse Zoom  : m");
@@ -106,6 +107,7 @@ int	loop_hook(t_mlx *mlx)
 		mlx->ratio = mlx->save_ratio
 			+ mlx->save_ratio * ((double)y - mlx->mouseY) / W;
 	}
+	mlx->iter++;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 20:56:01 by min-jo            #+#    #+#             */
-/*   Updated: 2022/02/19 15:36:57 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/02/19 17:17:09 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_mlx
 	int		mouseY;
 	t_mod	mod;
 	int		color;
+	int		iter;
 }	t_mlx;
 
 typedef struct s_trgb
@@ -101,6 +102,7 @@ typedef int	(*t_fp)(t_mlx *, double, double, int);
 int		strcomp(const char *s1, const char *s2);
 int		isstrin(const char *str, const char *names[], int size);
 void	init_screen_parameter(t_mlx *mlx);
+void	if_event_clear(t_mlx *mlx, int button, int keycode);
 /*
 * input.c
 */

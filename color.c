@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/12 15:31:29 by min-jo            #+#    #+#             */
-/*   Updated: 2022/02/19 16:09:47 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/02/23 20:39:15 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,8 @@ void	paint_image(t_mlx *mlx, int func_index, int iter, t_trgb trgb)
 			tmp = (int *)(mlx->img.addr + y * mlx->img.len + x
 					* mlx->img.bpp / 8);
 			ret = cal_trgb[func_index](mlx,
-					(x - CW) / W * mlx->ratio - mlx->center.xr,
-					(y - CH) / W * mlx->ratio - mlx->center.yi,
+					(x - CW) / W * mlx->ratio + mlx->center.xr,
+					(y - CH) / W * mlx->ratio + mlx->center.yi,
 					iter);
 			if (ret)
 				*tmp = *(int *)(char [4]){trgb.b, trgb.g, trgb.r, trgb.t};
